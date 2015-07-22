@@ -15,12 +15,14 @@ module.exports = function(model) {
           if (query[key]) {
             builder[key](query[key]);
           }
-        })
+        });
         result = yield builder.exec();
-        return this.body = result;
+        this.body = result;
+        return this.body;
       } catch (_error) {
         error = _error;
-        return this.body = error;
+        this.body = error;
+        return this.body;
       }
     },
     findById: function*(next) {
@@ -28,10 +30,12 @@ module.exports = function(model) {
       var error, result;
       try {
         result = yield model.findById(this.params.id).exec();
-        return this.body = result;
+        this.body = result;
+        return this.body;
       } catch (_error) {
         error = _error;
-        return this.body = error;
+        this.body = error;
+        return this.body;
       }
     },
     deleteById: function*(next) {
@@ -39,10 +43,12 @@ module.exports = function(model) {
       var error, result;
       try {
         result = yield model.findByIdAndRemove(this.params.id).exec();
-        return this.body = result;
+        this.body = result;
+        return this.body;
       } catch (_error) {
         error = _error;
-        return this.body = error;
+        this.body = error;
+        return this.body;
       }
     },
     replaceById: function*(next) {
@@ -53,10 +59,12 @@ module.exports = function(model) {
         newDocument = this.request.body;
         newDocument._id = this.params.id;
         result = yield model.create(newDocument);
-        return this.body = result;
+        this.body = result;
+        return this.body;
       } catch (_error) {
         error = _error;
-        return this.body = error;
+        this.body = error;
+        return this.body;
       }
     },
     updateById: function*(next) {
@@ -64,10 +72,12 @@ module.exports = function(model) {
       var error, result;
       try {
         result = yield model.findByIdAndUpdate(this.params.id, this.request.body, {new: true}).exec();
-        return this.body = result;
+        this.body = result;
+        return this.body;
       } catch (_error) {
         error = _error;
-        return this.body = error;
+        this.body = error;
+        return this.body;
       }
     },
     create: function*(next) {
@@ -76,10 +86,12 @@ module.exports = function(model) {
       try {
         result = yield model.create(this.request.body);
         this.status = 201;
-        return this.body = result;
+        this.body = result;
+        return this.body;
       } catch (_error) {
         error = _error;
-        return this.body = error;
+        this.body = error;
+        return this.body;
       }
     }
   };
