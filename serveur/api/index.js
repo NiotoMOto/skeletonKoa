@@ -9,6 +9,5 @@ module.exports =  function(app, model, prefix) {
     prefix = '';
   }
   actions = generateActions(model);
-  console.log(model.modelName);
   generateRoutes(app, model.modelName, actions, prefix);
 };

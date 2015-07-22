@@ -1,5 +1,5 @@
 mongoose = require('mongoose');
 
-module.exports = mongoose.model('User',{
+module.exports = mongoose.model('user',{
     name: String
-  });
+});

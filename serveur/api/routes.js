@@ -1,25 +1,24 @@
 var generateRoutes,
     pluralize = require('pluralize'),
     bodyParser = require('koa-body-parser'),
-    route = require('koa-route');
+    router = require('koa-router')();
 
 module.exports = generateRoutes = function(app, modelName, actions, prefix) {
-  console.log(app);
   if (prefix === null) {
     prefix = '';
   }
   modelName = pluralize(modelName);
 
-  console.log(modelName);
-
   app.use(bodyParser());
 
-  app.use(route.get(prefix + ("/" + modelName), actions.findAll));
-  app.use(route.get(prefix + ("/" + modelName + "/:id"), actions.findById));
-  app.use(route.post(prefix + ("/" + modelName), actions.create));
-  app.use(route.post(prefix + ("/" + modelName + "/:id"), actions.updateById));
-  app.use(route.del(prefix + ("/" + modelName + "/:id"), actions.deleteById));
-  app.use(route.put(prefix + ("/" + modelName), actions.create));
-  app.use(route.put(prefix + ("/" + modelName + "/:id"), actions.replaceById));
-  app.use(route.patch(prefix + ("/" + modelName + "/:id"), actions.updateById));
+  router.get(prefix + ("/" + modelName), actions.findAll);
+  router.get(prefix + ("/" + modelName + "/:id"), actions.findById);
+  router.post(prefix + ("/" + modelName), actions.create);
+  router.post(prefix + ("/" + modelName + "/:id"), actions.updateById);
+  router.del(prefix + ("/" + modelName + "/:id"), actions.deleteById);
+  router.put(prefix + ("/" + modelName), actions.create);
+  router.put(prefix + ("/" + modelName + "/:id"), actions.replaceById);
+  router.patch(prefix + ("/" + modelName + "/:id"), actions.updateById);
+
+  app.use(router.routes());
 };
