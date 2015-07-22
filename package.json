@@ -1,0 +1,20 @@
+{
+  "name": "coloquons",
+  "version": "0.0.1",
+  "description": "Outil de colocation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^0.21.0",
+    "koa-body-parser": "^1.1.2",
+    "koa-route": "^2.4.2",
+    "lodash": "^3.10.0",
+    "mongoose": "^4.0.8",
+    "pluralize": "^1.1.2",
+    "require-dir": "^0.3.0"
+  }
+}
