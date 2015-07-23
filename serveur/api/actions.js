@@ -1,7 +1,17 @@
+
+
+function populate(query, builder){
+  if(query.populates){
+    var populates = JSON.parse(query.populates);
+    populates.forEach(function (attr){
+      builder.populate(attr);
+    });
+  }
+}
+
 module.exports = function(model) {
   return {
     findAll: function*(next) {
-      console.log(next);
       yield next;
       var error, result;
       try {
@@ -10,7 +20,9 @@ module.exports = function(model) {
         if (query.conditions) {
           conditions = JSON.parse(query.conditions);
         }
+
         var builder = model.find(conditions);
+        populate(query, builder);
         ['limit', 'skip', 'sort'].forEach(function(key){
           if (query[key]) {
             builder[key](query[key]);
