@@ -63,6 +63,17 @@ module.exports = function(model) {
         return this.body;
       }
     },
+    deleteAll: function*(next) {
+        yield next;
+        var error, result;
+        try{
+          result = yield model.remove({}).exec();
+        } catch(_error) {
+          error = _error;
+          this.body = error;
+          return this.body;
+        }
+    },
     replaceById: function*(next) {
       yield next;
       var error, newDocument, result;
