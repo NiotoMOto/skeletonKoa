@@ -54,7 +54,9 @@ module.exports = function(model) {
       yield next;
       var error, result;
       try {
-        result = yield model.findByIdAndRemove(this.params.id).exec();
+        result = yield model.findOne({_id: this.params.id}, (err, data) => {
+          return data.remove();
+        }).exec();
         this.body = result;
         return this.body;
       } catch (_error) {
