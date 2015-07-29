@@ -4,7 +4,7 @@
   "description": "Outil de colocation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/mocha --reporter --harmony spec",
     "start": "node --harmony index.js"
   },
   "author": "",
@@ -15,7 +15,14 @@
     "koa-router": "^5.1.2",
     "lodash": "^3.10.0",
     "mongoose": "^4.0.8",
+    "mongoose-unique-validator": "^0.4.1",
     "pluralize": "^1.1.2",
     "require-dir": "^0.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "request": "^2.60.0",
+    "should": "^7.0.2",
+    "supertest": "^1.0.1"
   }
 }
