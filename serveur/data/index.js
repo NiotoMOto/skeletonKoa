@@ -1,6 +1,6 @@
 var requireDir = require('require-dir');
-requireDir('./models');
 
+requireDir('./models');
 
 mongoUrl = 'mongodb://localhost/coloc';
 mongoose = require('mongoose');

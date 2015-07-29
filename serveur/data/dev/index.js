@@ -15,16 +15,16 @@ function populate(next){
       user.create({name : 'Antoine'}),
       user.create({name : 'Sébastien'}),
       colocation.create({name : 'Poissy'})
-    ]).then((args)=> {
+    ]).then((args) => {
       return Promise.all([
         spend.create({creator: args[0]._id, toUser: args[1], colocation: args[2]._id, montant: 900}),
-        spend.create({creator: args[0]._id, toUser: args[2], colocation: args[1]._id, montant: 200}),
-        spend.create({creator: args[0]._id, toUser: args[2], colocation: args[1]._id, montant: 150})
-      ]).then(() =>{
+        spend.create({creator: args[1]._id, toUser: args[0], colocation: args[2]._id, montant: 200}),
+        spend.create({creator: args[1]._id, toUser: args[0], colocation: args[2]._id, montant: 150})
+      ]).then(() => {
           console.log('populate database finised');
       });
     });
   });
 }
 
-module.exports = populate;
+module.exports.populate = populate;

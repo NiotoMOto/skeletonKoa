@@ -1,11 +1,14 @@
+'use strict';
+
 var mongoose = require('mongoose'),
     spend = require('./spend'),
-    colocation = require('./colocation');
+    colocation = require('./colocation'),
+    uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    name: String
+    name: {type: String, unique: true, require: true}
 });
 
 schema.pre('remove', (next) => {
@@ -13,5 +16,8 @@ schema.pre('remove', (next) => {
     next();
   });
 });
+
+schema.plugin(uniqueValidator);
+
 
 module.exports = mongoose.model('user', schema);
