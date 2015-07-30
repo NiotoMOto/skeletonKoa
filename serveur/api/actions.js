@@ -9,6 +9,11 @@ function populate(query, builder){
   }
 }
 
+
+const defaultsSorts = {
+  limit: 15,
+};
+
 module.exports = function(model) {
   return {
     findAll: function*(next) {
@@ -23,13 +28,26 @@ module.exports = function(model) {
 
         var builder = model.find(conditions);
         populate(query, builder);
-        ['limit', 'skip', 'sort'].forEach(function(key){
+        var limit = query.limit ? query.limit : defaultsSorts.limit;
+        var skip = query.skip ? query.skip : 0;
+        builder
+          .limit(limit)
+          .skip(limit * skip);
+          
+        ['sort'].forEach(function(key){
           if (query[key]) {
             builder[key](query[key]);
+          }else{
+            builder[key](defaultsSorts[key]);
           }
         });
+
         result = yield builder.exec();
-        this.body = result;
+        count = yield builder.count();
+        this.body = {};
+        this.body.elements = result;
+        this.body.count = count;
+        this.body.skip = query.skip ? query.skip : 0;
         return this.body;
       } catch (_error) {
         error = _error;
