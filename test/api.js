@@ -21,13 +21,31 @@ describe('api', () => {
     });
   });
   describe('users', () => {
+    var userToFetch = {};
+    before((done) => {
+      user.create({name: 'userapiGetById'}, (err, model) => {
+        userToFetch = model;
+        done();
+      });
+    });
     describe('#GET /', () => {
       it('fetch all users', (done) =>{
         request.get('/api/users')
           .set('Accept', 'application/json')
           .expect('status', 200)
           .end((err, res, body) =>{
-            res.body.should.have.length(2);
+            res.body.should.not.be.empty();
+            done();
+          });
+      });
+    });
+    describe('#GET /:Id', () => {
+      it('fetch one user by id', (done) =>{
+        request.get('/api/users/'+ userToFetch._id)
+          .set('Accept', 'application/json')
+          .expect('status', 200)
+          .end((err, res, body) =>{
+            res.body.should.have.property('name', 'userapiGetById');
             done();
           });
       });
@@ -50,7 +68,7 @@ describe('api', () => {
           .set('Accept', 'application/json')
           .expect('status', 200)
           .end((err, res, body) =>{
-            res.body.should.have.length(1);
+            res.body.should.not.be.empty();
             done();
           });
       });
@@ -70,11 +88,11 @@ describe('api', () => {
   describe('spends', () => {
     describe('#GET /', () => {
       it('Fetch all spends', (done) =>{
-        request.get('/api/colocations')
+        request.get('/api/spends')
           .set('Accept', 'application/json')
           .expect('status', 200)
           .end((err, res, body) =>{
-            res.body.should.have.length(2);
+            res.body.should.not.be.empty();
             done();
           });
       });
@@ -106,6 +124,9 @@ describe('api', () => {
         .expect('Content-Type', /json/)
         .expect(201, done);
       });
+    });
+    describe('#DELETE /:id', () => {
+
     });
   });
 });
