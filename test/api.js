@@ -62,6 +62,13 @@ describe('api', () => {
     });
   });
   describe('colocations', () => {
+    var colocationToFetch;
+    before((done) => {
+      colocation.create({name: 'colocationApiGetById'}, (err, model) => {
+        colocationToFetch = model;
+        done();
+      });
+    });
     describe('#GET /', () => {
       it('fetch all colocations', (done) =>{
         request.get('/api/colocations')
@@ -69,6 +76,17 @@ describe('api', () => {
           .expect('status', 200)
           .end((err, res, body) =>{
             res.body.should.not.be.empty();
+            done();
+          });
+      });
+    });
+    describe('#GET /:Id', () => {
+      it('fetch one user by id', (done) =>{
+        request.get('/api/colocations/'+ colocationToFetch._id)
+          .set('Accept', 'application/json')
+          .expect('status', 200)
+          .end((err, res, body) =>{
+            res.body.should.have.property('name', 'colocationApiGetById');
             done();
           });
       });
@@ -86,6 +104,29 @@ describe('api', () => {
   });
 
   describe('spends', () => {
+    var colocationSpend = {};
+    var creatorSpend = {};
+    var toUserSpend = {};
+    var spendToFetch = {};
+    before((done) => {
+      Promise.all([
+        user.create({name: 'userSpendApi'}),
+        user.create({name: 'userSpendApi2'}),
+        colocation.create({name: 'colocSpendApi'})
+      ]).then((results) => {
+        creatorSpend = results[0];
+        toUserSpend = results[1];
+        colocationSpend = results[2];
+        spend.create({
+          creator: creatorSpend._id,
+          toUser: toUserSpend._id,
+          colocation: colocationSpend._id
+        }, (err, model) => {
+          spendToFetch = model;
+        });
+        done();
+      });
+    });
     describe('#GET /', () => {
       it('Fetch all spends', (done) =>{
         request.get('/api/spends')
@@ -97,23 +138,18 @@ describe('api', () => {
           });
       });
     });
-    describe('#POST /', () => {
-      var colocationSpend = {};
-      var creatorSpend = {};
-      var toUserSpend = {};
-      before((done) => {
-        Promise.all([
-          user.create({name: 'userSpendApi'}),
-          user.create({name: 'userSpendApi2'}),
-          colocation.create({name: 'colocSpendApi'})
-        ]).then((results) => {
-          creatorSpend = results[0];
-          toUserSpend = results[1];
-          colocationSpend = results[2];
-
-          done();
-        });
+    describe('#GET /:Id', () => {
+      it('fetch one user by id', (done) =>{
+        request.get('/api/spends/'+ spendToFetch._id)
+          .set('Accept', 'application/json')
+          .expect('status', 200)
+          .end((err, res, body) =>{
+            res.body.should.have.property('creator');
+            done();
+          });
       });
+    });
+    describe('#POST /', () => {
       it('Create spend', (done) => {
         request.post('/api/colocations')
         .send({
