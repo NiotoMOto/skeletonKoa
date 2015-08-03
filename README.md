@@ -7,7 +7,12 @@ Squelette api REST koa
 npm install
 ```
 
-#### Start
+### Start
+#### mongodb
+```
+mongod -dbpath 'path to the folder'
+```
+#### server
 ```
 node --harmony index.js
 ```
