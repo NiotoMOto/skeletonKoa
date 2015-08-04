@@ -1,6 +1,5 @@
 var generateRoutes,
-    pluralize = require('pluralize'),
-    router = require('koa-router')();
+    pluralize = require('pluralize');
 
 module.exports = generateRoutes = function(app, modelName, actions, prefix, router) {
   if (prefix === null) {
