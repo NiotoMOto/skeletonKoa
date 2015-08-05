@@ -1,22 +1,40 @@
 'use strict';
 
 var koa = require('koa');
-var generateApi = require('./serveur/api/');
-var data = require('./serveur/data/');
-var _ = require('lodash');
-var router = require('koa-router')();
+var views = require('koa-views');
 var bodyParser = require('koa-body-parser');
-var dataDev = require('./serveur/data/dev/');
+var staticCache = require('koa-static-cache');
+var router = require('koa-router')();
+var _ = require('lodash');
 var mongoose = require('mongoose');
+var path = require('path');
+
+var data = require('./serveur/data/');
+var dataDev = require('./serveur/data/dev/');
+var generateApi = require('./serveur/api/');
+var generateAppRoutes = require('./serveur/app/');
+
+
 var env = process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
-const app = koa();
+var app = koa();
 app.use(bodyParser());
+app.use(staticCache(path.join(__dirname, 'public'), {prefix: '/public'}));
+var appFiles = {};
+app.use(staticCache(path.join(__dirname, 'app'), {prefix: '/app'}, appFiles));
+staticCache(path.join(__dirname, 'tmp'), appFiles);
+
+if(env === 'development'){
+  app.use(staticCache(path.join(__dirname, 'tmp'), {prefix: '/app'}));
+}
+app.use(views('views', {default: 'dust'}));
 
 // Routes
 _.each(mongoose.models, (m, key) => {
   generateApi(app, m, '/api', router);
 });
+generateAppRoutes(app, null, router);
+
 app.use(router.routes());
 
 function start(){
