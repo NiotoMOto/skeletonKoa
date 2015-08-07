@@ -1,0 +1,30 @@
+html
+  head
+    meta(charset='utf-8')
+    title Coloquons
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- inject:css -->
+    <!-- endinject -->
+
+  head
+  body(ng-app='colocons' layout='row')
+    md-sidenav(md-component-id='left', class='site-sidenav md-sidenav-left md-whiteframe-z2', md-is-locked-open="$mdMedia('gt-sm')")
+      | Utilisateurs
+    
+    div(flex, layout='column', tabIndex='-1', role='main', class='md-whiteframe-z2')
+      md-toolbar(layout='row', class='md-whiteframe-z1')
+        div(class='md-toolbar-tools')
+          span colocons
+          span(flex= '')
+          md-button button
+          
+      md-content(flex='', id="content")
+        h2 Toto
+  
+  
+  
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- inject:js -->
+    <!-- endinject -->

@@ -2,32 +2,47 @@ var gulp = require('gulp');
 var wiredep = require('wiredep').stream;
 var spawn = require('child_process').spawn;
 var $ = require('gulp-load-plugins')();
+var livereload = require('gulp-livereload');
+var babel = require('gulp-babel');
+var jade = require('gulp-jade');
 
 var paths = {
-  tmp : './tmp',
-  tmpFiles : './tmp/**/*',
-  index: './app/index.dust',
-  appJs: './app/scripts/**/*.js',
-  nodeIndex : './index.js',
+  tmp: './tmp',
+  tmpFiles: './tmp/**/*',
+  index: './app/index.jade',
+  appJs: './app/**/*.js',
+  appCss: './app/**/*.css',
+  jade: './app/**/*.jade',
+  appBowers: './app/bower_components/**/*',
+  bowerJson: './bower.json',
+  nodeIndex: './index.js',
   nodeSrcipts: './serveur/**/*.js',
-  serverJs: './server.js'
+  frontHtml: './views/**/*.dust',
+  serverJs: './server.js',
+  except: function(path) {
+    return '!' + path;
+  }
 };
 var node;
 
-gulp.task('inject', ['clean'], function(){
-  gulp.src(paths.index)
+gulp.task('inject', function() {
+  return gulp.src(paths.index)
+    .pipe(jade())
     .pipe($.inject(gulp.src([
-      paths.appJs
-    ], {read: false, addPrefix: 'app/'}), {relative: true, addPrefix: 'app'}))
+      paths.appJs,
+      paths.appCss,
+      paths.except(paths.appBowers)
+    ], {
+      read: false
+    }), {
+      relative: true
+    }))
     .pipe(wiredep({
-      options: {
-        cwd: 'app/'
-      },
-      cwd: 'app/',
       bowerJson: require('./bower.json'),
       directory: 'app/bower_components'
     }))
-    .pipe(gulp.dest(paths.tmp));
+    .pipe(gulp.dest(paths.tmp))
+    .pipe(livereload());
 });
 
 gulp.task('clean', function() {
@@ -35,17 +50,53 @@ gulp.task('clean', function() {
     .pipe($.clean());
 });
 
+gulp.task('appCss', function() {
+  return gulp.src([
+      paths.appCss,
+      paths.except(paths.appBowers)
+    ])
+    .pipe(gulp.dest(paths.tmp));
+});
+
 gulp.task('server', function() {
   if (node) node.kill();
-  node = spawn('node', ['--harmony','index.js'], {stdio: 'inherit'});
-  node.on('close', function (code) {
+  node = spawn('node', ['--harmony', 'index.js'], {
+    stdio: 'inherit'
+  });
+  node.on('close', function(code) {
     if (code === 8) {
       gulp.log('Error detected, waiting for changes...');
     }
   });
 });
 
-gulp.task('watch', function(){
+gulp.task('frontHtml', function() {
+  return gulp.src([paths.frontHtml])
+    .pipe(livereload());
+});
+
+gulp.task('appJs', function() {
+  return gulp.src([
+      paths.appJs,
+      paths.except(paths.appBowers)
+    ])
+    .pipe(babel())
+    .pipe(gulp.dest(paths.tmp))
+    .pipe(livereload());
+});
+
+gulp.task('jade', function() {
+  return gulp.src([
+      paths.jade,
+      paths.except(paths.index)
+    ])
+    .pipe(jade())
+    .pipe(gulp.dest(paths.tmp))
+    .pipe(livereload());
+});
+
+gulp.task('watch', function() {
+  livereload.listen();
   gulp.watch([
     paths.nodeIndex,
     paths.nodeSrcipts,
@@ -53,17 +104,46 @@ gulp.task('watch', function(){
   ], function() {
     gulp.run('server');
   });
+
+  gulp.watch([
+    paths.frontHtml
+  ], ['frontHtml']);
+
+  gulp.watch([
+    paths.appJs
+  ], ['appJs']);
+
+  gulp.watch([
+    paths.appJs
+  ], ['appCss']);
+
+  gulp.watch([
+    paths.jade
+  ], ['jade']);
+
+  gulp.watch([
+    paths.bowerJson,
+    paths.index,
+  ], ['inject']);
+
 });
 
-gulp.task('runServeur', function(){
-  gulp.run('server');
+gulp.task('runServeur', function() {
+  return gulp.run('server');
 });
 
-gulp.task('default',['runServeur', 'watch'], function() {
-});
+gulp.task('default', [
+  'clean',
+  'appCss',
+  'appJs',
+  'inject',
+  'jade',
+  'runServeur',
+  'watch'
+], function() {});
 
 process.on('exit', function() {
-    if (node){
-       node.kill();
-     }
+  if (node) {
+    node.kill();
+  }
 });

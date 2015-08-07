@@ -1,0 +1,33 @@
+{
+  "name": "coloquons",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/NiotoMOto/skeletonKoa",
+  "authors": [
+    "NiotoMOto <antoine.guillemoto@gmail.com>"
+  ],
+  "description": "Outil de colocation",
+  "moduleType": [
+    "es6",
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "koa"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.10.0",
+    "angular": "~1.4.3",
+    "bootstrap": "~3.3.5",
+    "angular-ui-router": "~0.2.15"
+  }
+}

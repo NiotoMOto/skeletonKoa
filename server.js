@@ -21,12 +21,16 @@ var app = koa();
 app.use(bodyParser());
 app.use(staticCache(path.join(__dirname, 'public'), {prefix: '/public'}));
 var appFiles = {};
-app.use(staticCache(path.join(__dirname, 'app'), {prefix: '/app'}, appFiles));
-staticCache(path.join(__dirname, 'tmp'), appFiles);
 
 if(env === 'development'){
-  app.use(staticCache(path.join(__dirname, 'tmp'), {prefix: '/app'}));
+  app.use(staticCache(path.join(__dirname, 'tmp'), {prefix: '/app'}, appFiles));
+  app.use(staticCache(path.join(__dirname, 'app/bower_components'), {prefix: '/app/bower_components'}, appFiles));
+  app.indexFile = '../tmp/index';
+}else if(env === 'production'){
+  app.use(staticCache(path.join(__dirname, 'app'), {prefix: '/dist'}, appFiles));
+  app.indexFile = '../dist/index';
 }
+
 app.use(views('views', {default: 'dust'}));
 
 // Routes

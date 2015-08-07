@@ -4,6 +4,9 @@
   "mocha": true,
   "globals":{
     "require": true,
-    "should": true
+    "should": true,
+    "angular": true,
+    "colocons": true,
+    "window": true
   }
 }
