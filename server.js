@@ -8,6 +8,8 @@ var router = require('koa-router')();
 var _ = require('lodash');
 var mongoose = require('mongoose');
 var path = require('path');
+var noCache = require('koa-no-cache');
+var cors = require('koa-cors');
 
 var data = require('./serveur/data/');
 var dataDev = require('./serveur/data/dev/');
@@ -19,10 +21,14 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
 var app = koa();
 app.use(bodyParser());
+app.use(cors());
 app.use(staticCache(path.join(__dirname, 'public'), {prefix: '/public'}));
 var appFiles = {};
 
 if(env === 'development'){
+  app.use(noCache({
+    global: true
+  }));
   app.use(staticCache(path.join(__dirname, 'tmp'), {prefix: '/app'}, appFiles));
   app.use(staticCache(path.join(__dirname, 'app/bower_components'), {prefix: '/app/bower_components'}, appFiles));
   app.indexFile = '../tmp/index';

@@ -1,29 +1,32 @@
-html
+html(lang='fr')
   head
     meta(charset='utf-8')
+    meta(name='viewport', content='initial-scale=1, maximum-scale=1, user-scalable=yes')
     title Coloquons
     <!-- bower:css -->
     <!-- endbower -->
     <!-- inject:css -->
     <!-- endinject -->
-
   head
   body(ng-app='colocons' layout='row')
-    md-sidenav(md-component-id='left', class='site-sidenav md-sidenav-left md-whiteframe-z2', md-is-locked-open="$mdMedia('gt-sm')")
-      | Utilisateurs
-    
-    div(flex, layout='column', tabIndex='-1', role='main', class='md-whiteframe-z2')
-      md-toolbar(layout='row', class='md-whiteframe-z1')
-        div(class='md-toolbar-tools')
-          span colocons
-          span(flex= '')
-          md-button button
+  md-sidenav.md-sidenav-left.md-whiteframe-z2(layout="column", md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
+    md-toolbar.md-tall.md-hue-2
+      span(flex="")
+        .md-toolbar-tools-bottom.inset(layout="column")
+    md-list(role="list")
+      md-item
+        a
+          md-item-content(md-ink-ripple="", layout="row", layout-align="start center")
+            | Menu 1
+      md-item
+        a
+          md-item-content(md-ink-ripple="", layout="row", layout-align="start center")
+            | Menu 2
+      md-divider
+        md-subheader Management
           
-      md-content(flex='', id="content")
-        h2 Toto
-  
-  
-  
+  .relative(layout="column", layout-fill="", role="main")
+    md-toolbar
     <!-- bower:js -->
     <!-- endbower -->
     <!-- inject:js -->

@@ -5,9 +5,10 @@ var $ = require('gulp-load-plugins')();
 var livereload = require('gulp-livereload');
 var babel = require('gulp-babel');
 var jade = require('gulp-jade');
-
+var path = require('path');
 var paths = {
   tmp: './tmp',
+  gulpFile: './gulpFile.js',
   tmpFiles: './tmp/**/*',
   index: './app/index.jade',
   appJs: './app/**/*.js',
@@ -35,11 +36,20 @@ gulp.task('inject', function() {
     ], {
       read: false
     }), {
-      relative: true
+      relative: true,
+      addPrefix: 'app'
     }))
     .pipe(wiredep({
       bowerJson: require('./bower.json'),
-      directory: 'app/bower_components'
+      directory: 'app/bower_components',
+      fileTypes: {
+       html: {
+         replace: {
+           js: '<script src="app/{{filePath}}"></script>',
+           css: '<link rel="stylesheet" href="app/{{filePath}}" />'
+         }
+       }
+     }
     }))
     .pipe(gulp.dest(paths.tmp))
     .pipe(livereload());
@@ -133,7 +143,6 @@ gulp.task('runServeur', function() {
 });
 
 gulp.task('default', [
-  'clean',
   'appCss',
   'appJs',
   'inject',
