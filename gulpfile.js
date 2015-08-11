@@ -65,7 +65,8 @@ gulp.task('appCss', function() {
       paths.appCss,
       paths.except(paths.appBowers)
     ])
-    .pipe(gulp.dest(paths.tmp));
+    .pipe(gulp.dest(paths.tmp))
+    .pipe(livereload());
 });
 
 gulp.task('server', function() {
@@ -124,7 +125,7 @@ gulp.task('watch', function() {
   ], ['appJs']);
 
   gulp.watch([
-    paths.appJs
+    paths.appCss
   ], ['appCss']);
 
   gulp.watch([

@@ -1,32 +1,31 @@
-html(lang='fr')
+html(lang='fr', ng-app='colocons')
   head
     meta(charset='utf-8')
-    meta(name='viewport', content='initial-scale=1, maximum-scale=1, user-scalable=yes')
-    title Coloquons
+    meta(name='viewport', content='initial-scale=1, maximum-scale=1, user-scalable=no')
+    title Colocons
     <!-- bower:css -->
     <!-- endbower -->
     <!-- inject:css -->
     <!-- endinject -->
   head
-  body(ng-app='colocons' layout='row')
-  md-sidenav.md-sidenav-left.md-whiteframe-z2(layout="column", md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
-    md-toolbar.md-tall.md-hue-2
-      span(flex="")
-        .md-toolbar-tools-bottom.inset(layout="column")
-    md-list(role="list")
-      md-item
-        a
-          md-item-content(md-ink-ripple="", layout="row", layout-align="start center")
-            | Menu 1
-      md-item
-        a
-          md-item-content(md-ink-ripple="", layout="row", layout-align="start center")
-            | Menu 2
-      md-divider
-        md-subheader Management
-          
-  .relative(layout="column", layout-fill="", role="main")
-    md-toolbar
+  body(layout="column")
+    md-toolbar(layout="row", ui-view="toolbar")
+      .md-toolbar-tools
+        md-button.md-icon-button(ng-click="toolbar.toggleSidenav('left')", hide-gt-sm)
+          md-icon(aria-label="Menu", md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg")
+        h1 Colocons
+
+    div(layout="row", flex)
+      md-sidenav.md-sidenav-left.md-whiteframe-z2(layout="column", md-component-id="left", md-is-locked-open="$mdMedia('gt-sm')", ui-view="menu")
+        md-content(flex, role="navigation")
+          ul.menu
+            li(ng-repeat="link in menu.menuLinks")
+              md-button(ng-href="#{{link.href}}")
+                span {{link.name}}
+
+      #content(layout="column", flex)
+        md-content.md-padding(layout="column", flex)
+
     <!-- bower:js -->
     <!-- endbower -->
     <!-- inject:js -->
