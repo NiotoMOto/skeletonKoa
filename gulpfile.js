@@ -6,6 +6,7 @@ var livereload = require('gulp-livereload');
 var babel = require('gulp-babel');
 var jade = require('gulp-jade');
 var path = require('path');
+
 var paths = {
   tmp: './tmp',
   gulpFile: './gulpFile.js',

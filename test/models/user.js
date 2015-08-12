@@ -12,7 +12,7 @@ describe('Models', () =>{
   describe('Users', () =>{
     describe('#create()', () => {
       it('should create a new user', (done) => {
-        user.create({name: 'toto'}, (err, createdUser) =>{
+        user.create({name: 'modelTest1', password: 'modelTest1'}, (err, createdUser) =>{
           should.not.exist(err);
           createdUser.should.have.property('_id');
           userId = createdUser._id;
@@ -21,7 +21,7 @@ describe('Models', () =>{
         });
       });
       it('should return unique constraint error', (done) => {
-        user.create({name: 'toto'}, (err, createdUser) =>{
+        user.create({name: 'modelTest1', password: 'modelTest1'}, (err, createdUser) =>{
           should.exist(err);
           done();
         });
@@ -29,17 +29,17 @@ describe('Models', () =>{
     });
     describe('#find()', () => {
       it('should get user by name', (done) => {
-        user.find({name : 'toto'}, (err, result) => {
+        user.find({name : 'modelTest1'}, (err, result) => {
           should.not.exist(err);
           result.should.have.length(1);
-          result[0].name.should.be.exactly('toto');
+          result[0].name.should.be.exactly('modelTest1');
           done();
         });
       });
       it('should get user by id', (done) => {
         user.findById(userId, (err, result) => {
           should.not.exist(err);
-          result.name.should.be.exactly('toto');
+          result.name.should.be.exactly('modelTest1');
           done();
         });
       });
@@ -49,8 +49,8 @@ describe('Models', () =>{
       var spendDxpectDel = {};
       before((done) => {
         Promise.all([
-          user.create({name: 'userdeleteTest'}),
-          user.create({name: 'userdeleteTest2'}),
+          user.create({name: 'userdeleteTest', password: 'userdeleteTest'}),
+          user.create({name: 'userdeleteTest2', password: 'userdeleteTest2'}),
           colocation.create({name: 'colocDeleteTest'})
         ]).then((results) => {
           userToDelete = results[0];
@@ -72,7 +72,7 @@ describe('Models', () =>{
     describe('#update()', () => {
       var userToUpdate = {};
       before((done) => {
-        user.create({name: 'userUpdateTest'}).then((model) => {
+        user.create({name: 'userUpdateTest', password: 'userUpdateTest'}).then((model) => {
           userToUpdate = model;
           done();
         });

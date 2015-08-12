@@ -7,4 +7,5 @@ module.exports = generateRoutes = function(app, prefix, router) {
   }
   router.get(prefix + '/', actions.exposeIndex);
   router.get(prefix + '/app', actions.exposeApp);
+  router.get(prefix + '/models', actions.exposeModels);
 };

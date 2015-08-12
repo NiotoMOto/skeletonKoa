@@ -12,8 +12,8 @@ function populate(next){
   ]).then(() =>{
     // Populate
     return Promise.all([
-      user.create({name : 'Antoine'}),
-      user.create({name : 'Sébastien'}),
+      user.create({name : 'Antoine', password: 'antoine'}),
+      user.create({name : 'Sébastien', password: 'seb'}),
       colocation.create({name : 'Poissy'})
     ]).then((args) => {
       return Promise.all([

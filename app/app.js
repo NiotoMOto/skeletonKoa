@@ -18,6 +18,14 @@ colocons.config(($stateProvider, $urlRouterProvider) => {
   });
   $urlRouterProvider.otherwise('/');
 });
+
+colocons.run(($rootScope) => {
+  $rootScope.user ={
+    id:"55c9fb062fb5420804bd8008",
+    name:"antoine"
+  };
+});
+
 colocons.controller('menuCtrl', () => {
   return new class {
     constructor() {

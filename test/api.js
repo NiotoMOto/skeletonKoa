@@ -23,7 +23,7 @@ describe('api', () => {
   describe('users', () => {
     var userToFetch = {};
     before((done) => {
-      user.create({name: 'userapiGetById'}, (err, model) => {
+      user.create({name: 'userapiGetById', password: 'tata'}, (err, model) => {
         userToFetch = model;
         done();
       });
@@ -54,10 +54,26 @@ describe('api', () => {
       it('Create users', (done) => {
         request.post('/api/users')
            .send({
-             name: 'test'
+             name: 'test',
+             password: 'test'
            })
           .expect('Content-Type', /json/)
           .expect(201, done);
+      });
+    });
+    describe('#POST /:ID', () => {
+      it('Update user', (done) => {
+        request.post('/api/users/'+userToFetch._id)
+           .send({
+             name: 'testupdate'
+           })
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end((err, res, body) =>{
+            res.body.should.not.be.empty();
+            res.body.name.should.be.exactly('testupdate');
+            done();
+          });
       });
     });
   });
@@ -92,7 +108,7 @@ describe('api', () => {
       });
     });
     describe('#POST /', () => {
-      it('Create users', (done) => {
+      it('Create colocation', (done) => {
         request.post('/api/colocations')
            .send({
              name: 'apicreate'
@@ -110,8 +126,8 @@ describe('api', () => {
     var spendToFetch = {};
     before((done) => {
       Promise.all([
-        user.create({name: 'userSpendApi'}),
-        user.create({name: 'userSpendApi2'}),
+        user.create({name: 'userSpendApi', password: 'userSpendApi'}),
+        user.create({name: 'userSpendApi2', password: 'userSpendApi2'}),
         colocation.create({name: 'colocSpendApi'})
       ]).then((results) => {
         creatorSpend = results[0];

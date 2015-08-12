@@ -33,7 +33,7 @@ module.exports = function(model) {
         builder
           .limit(limit)
           .skip(limit * skip);
-          
+
         ['sort'].forEach(function(key){
           if (query[key]) {
             builder[key](query[key]);
@@ -114,11 +114,15 @@ module.exports = function(model) {
       yield next;
       var error, result;
       try {
-        result = yield model.findByIdAndUpdate(this.params.id, this.request.body, {new: true}).exec();
+        const request = this.request;
+        const body = this.body;
+        data = yield model.findOne({_id: this.params.id}).exec();
+        result = yield data.save();
         this.body = result;
         return this.body;
       } catch (_error) {
         error = _error;
+        this.status = 500;
         this.body = error;
         return this.body;
       }
@@ -133,6 +137,7 @@ module.exports = function(model) {
         return this.body;
       } catch (_error) {
         error = _error;
+        this.status = 500;
         this.body = error;
         return this.body;
       }
