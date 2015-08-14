@@ -114,10 +114,7 @@ module.exports = function(model) {
       yield next;
       var error, result;
       try {
-        const request = this.request;
-        const body = this.body;
-        data = yield model.findOne({_id: this.params.id}).exec();
-        result = yield data.save();
+        result = yield model.update({_id: this.params.id}, this.request.body).exec();
         this.body = result;
         return this.body;
       } catch (_error) {

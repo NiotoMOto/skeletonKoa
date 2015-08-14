@@ -71,7 +71,7 @@ describe('api', () => {
           .expect(200)
           .end((err, res, body) =>{
             res.body.should.not.be.empty();
-            res.body.name.should.be.exactly('testupdate');
+            res.body.ok.should.be.exactly(1);
             done();
           });
       });
@@ -97,7 +97,7 @@ describe('api', () => {
       });
     });
     describe('#GET /:Id', () => {
-      it('fetch one user by id', (done) =>{
+      it('fetch one colocation by id', (done) =>{
         request.get('/api/colocations/'+ colocationToFetch._id)
           .set('Accept', 'application/json')
           .expect('status', 200)
@@ -155,7 +155,7 @@ describe('api', () => {
       });
     });
     describe('#GET /:Id', () => {
-      it('fetch one user by id', (done) =>{
+      it('fetch one spend by id', (done) =>{
         request.get('/api/spends/'+ spendToFetch._id)
           .set('Accept', 'application/json')
           .expect('status', 200)

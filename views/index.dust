@@ -27,7 +27,7 @@
                         <a class="page-scroll" href="#inscription">Inscription</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#connexion">Connexion</a>
+                        <a class="page-scroll" href="/login">Connexion</a>
                     </li>
                 </ul>
             </div>

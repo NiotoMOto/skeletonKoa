@@ -11,12 +11,13 @@ const path = require('path');
 const noCache = require('koa-no-cache');
 const cors = require('koa-cors');
 const session = require('koa-generic-session');
-const passport = require('passport');
+const passport = require('koa-passport');
 
 const data = require('./serveur/data/');
 const dataDev = require('./serveur/data/dev/');
 const generateApi = require('./serveur/api/');
 const generateAppRoutes = require('./serveur/app/');
+const generatePublicRoutes = require('./serveur/public/');
 
 
 const env = process.env.NODE_ENV = process.env.NODE_ENV || "development";
@@ -25,8 +26,12 @@ const app = koa();
 app.use(bodyParser());
 app.use(cors());
 app.keys = ['sessionSecret'];
-// app.use(session());
-// app.proxy = true;
+app.use(session());
+app.proxy = true;
+require('./serveur/auth');
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(staticCache(path.join(__dirname, 'public'), {prefix: '/public'}));
 const appFiles = {};
 
@@ -46,16 +51,29 @@ if(env === 'development'){
 app.use(views('views', {default: 'dust'}));
 
 // Routes
-const securedRoutes = new Router();
+const apiRoutes = new Router();
+const appRoutes = new Router();
 const publicRoutes = new Router();
 
 _.each(mongoose.models, (m, key) => {
-  generateApi(app, m, '/api', securedRoutes);
+  generateApi(app, m, '/api', apiRoutes);
 });
-generateAppRoutes(app, null, publicRoutes);
+generateAppRoutes(app, null, appRoutes);
+generatePublicRoutes(app, null, publicRoutes);
 
-app.use(securedRoutes.routes());
 app.use(publicRoutes.routes());
+
+app.use(function*(next) {
+  if (this.isAuthenticated()) {
+    yield next;
+  } else {
+    console.log(this.request.url);
+    this.redirect('/');
+  }
+});
+
+app.use(apiRoutes.routes());
+app.use(appRoutes.routes());
 
 function start(){
   // populate database

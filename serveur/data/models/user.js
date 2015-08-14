@@ -18,8 +18,9 @@ schema.pre('remove', (next) => {
 });
 
 schema.pre('save', (next) => {
-  if(this.isModified('password'))
+  if(this.isModified('password')){
     this.password = bcrypt.hashSync(this.password);
+  }
   next();
 });
 

@@ -1,0 +1,10 @@
+var generateRoutes;
+var actions = require('./actions');
+
+module.exports = generateRoutes = function(app, prefix, router) {
+  if (prefix === null) {
+    prefix = '';
+  }
+  router.get(prefix + '/', actions.exposeIndex);
+  router.get(prefix + '/login', actions.login);
+};
