@@ -70,7 +70,6 @@ app.use(function*(next) {
   if (this.isAuthenticated()) {
     yield next;
   } else {
-    console.log(this.request.url);
     this.redirect('/');
   }
 });

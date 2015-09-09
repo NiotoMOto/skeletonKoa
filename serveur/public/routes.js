@@ -6,5 +6,6 @@ module.exports = generateRoutes = function(app, prefix, router) {
     prefix = '';
   }
   router.get(prefix + '/', actions.exposeIndex);
-  router.get(prefix + '/login', actions.login);
+  router.get(prefix + '/login', actions.loginPage);
+  router.post(prefix + '/login', actions.login);
 };

@@ -17,17 +17,17 @@
         <h1 class="title">Connexion</h1>
         <form action="login" method="post">
           <div class="input-container">
-            <input type="text" id="Username" required="required"/>
+            <input name="username" type="text" id="Username" required="required"/>
             <label for="Username">Pseudo</label>
             <div class="bar"></div>
           </div>
           <div class="input-container">
-            <input type="password" id="Password" required="required"/>
+            <input name="password" type="password" id="Password" required="required"/>
             <label for="Password">Mot de passe</label>
             <div class="bar"></div>
           </div>
           <div class="button-container">
-            <button><span>Connexion</span></button>
+            <button type="submit"><span>Connexion</span></button>
           </div>
           <div class="footer"><a href="#">Forgot your password?</a></div>
         </form>

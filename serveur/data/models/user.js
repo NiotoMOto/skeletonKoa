@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 
 var Schema = mongoose.Schema;
 
+
 var schema = new Schema({
     name: {type: String, unique: true, require: true},
     password: { type: String, required: true, bcrypt: true },
@@ -24,13 +25,10 @@ schema.pre('save', (next) => {
   next();
 });
 
+schema.plugin(uniqueValidator);
 
 schema.methods.verifyPassword = function(password, cb){
   cb(bcrypt.compareSync(password, this.password));
 };
-
-
-
-schema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('user', schema);
