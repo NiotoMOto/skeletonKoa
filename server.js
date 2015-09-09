@@ -19,6 +19,9 @@ const generateApi = require('./serveur/api/');
 const generateAppRoutes = require('./serveur/app/');
 const generatePublicRoutes = require('./serveur/public/');
 
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({name: "myapp"});
+
 
 const env = process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
